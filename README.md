@@ -1,7 +1,5 @@
 # async-array-buffer-broker
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/chrisguttandin/async-array-buffer-broker.svg)](https://greenkeeper.io/)
-
 **The broker which is used by the async-array-buffer package.**
 
 [![tests](https://img.shields.io/travis/chrisguttandin/async-array-buffer-broker/master.svg?style=flat-square)](https://travis-ci.org/chrisguttandin/async-array-buffer-broker)
