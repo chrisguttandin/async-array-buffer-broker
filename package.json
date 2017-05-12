@@ -1,0 +1,65 @@
+{
+  "author": "Christoph Guttandin",
+  "bugs": {
+    "url": "https://github.com/chrisguttandin/async-array-buffer-broker/issues"
+  },
+  "dependencies": {
+    "async-array-buffer-worker": "^2.0.0"
+  },
+  "description": "The broker which is used by the async-array-buffer package.",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "chai": "^3.5.0",
+    "eslint-config-holy-grail": "^17.0.0",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-karma": "^2.0.0",
+    "grunt-sh": "^0.1.4",
+    "grunt-tslint": "^5.0.0",
+    "gruntify-eslint": "^3.1.0",
+    "husky": "^0.13.1",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-mocha": "^1.2.0",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sauce-launcher": "^1.1.0",
+    "karma-sinon-chai": "^1.2.4",
+    "karma-webpack": "^2.0.1",
+    "load-grunt-config": "^0.19.2",
+    "mocha": "^3.1.2",
+    "rollup": "^0.41.4",
+    "rollup-plugin-babel": "^2.6.1",
+    "sinon": "^2.0.0",
+    "sinon-chai": "^2.8.0",
+    "ts-loader": "^2.0.0",
+    "tsconfig-holy-grail": "^2.1.0",
+    "tslint-config-holy-grail": "^7.0.0",
+    "typescript": "^2.0.9",
+    "webpack": "^2.1.0-beta.25"
+  },
+  "files": [
+    "build/es5/",
+    "build/es2015/",
+    "build/esm/",
+    "src/"
+  ],
+  "homepage": "https://github.com/chrisguttandin/async-array-buffer-broker",
+  "license": "MIT",
+  "main": "build/es5/bundle.js",
+  "module": "build/esm/module.js",
+  "name": "async-array-buffer-broker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisguttandin/async-array-buffer-broker.git"
+  },
+  "scripts": {
+    "precommit": "grunt lint",
+    "prepublish": "grunt build",
+    "test": "grunt lint && grunt test"
+  },
+  "types": "build/es2015/module.d.ts",
+  "version": "1.0.0"
+}
