@@ -44,7 +44,7 @@ export const load = (url: string) => {
     };
 
     const deallocate = (arrayBuffer: ArrayBuffer) => {
-        worker.postMessage(<IDeallocateNotification> { id: null, method: 'deallocate', params: { arrayBuffer } });
+        worker.postMessage(<IDeallocateNotification> { id: null, method: 'deallocate', params: { arrayBuffer } }, [ arrayBuffer ]);
     };
 
     return {
