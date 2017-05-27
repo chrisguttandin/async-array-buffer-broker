@@ -89,10 +89,15 @@ describe('module', () => {
 
         it('should send the correct message', (done) => {
             Worker.addEventListener(0, 'message', ({ data }) => {
+                expect(data.params.arrayBuffer).to.be.an.instanceOf(ArrayBuffer);
+                expect(data.params.arrayBuffer.byteLength).to.equal(2048);
+
                 expect(data).to.deep.equal({
                     id: null,
                     method: 'deallocate',
-                    params: { arrayBuffer }
+                    params: {
+                        arrayBuffer: data.params.arrayBuffer
+                    }
                 });
 
                 done();
