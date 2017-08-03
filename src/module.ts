@@ -1,4 +1,11 @@
-import { IAllocateRequest, IAllocateResponse, IDeallocateNotification, IWorkerEvent } from 'async-array-buffer-worker';
+import {
+    IAllocateRequest,
+    IAllocateResponse,
+    IConnectRequest,
+    IDeallocateNotification,
+    IDisconnectRequest,
+    IWorkerEvent
+} from 'async-array-buffer-worker';
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
@@ -43,12 +50,66 @@ export const load = (url: string) => {
         });
     };
 
+    const connect = (port: MessagePort): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            const id = generateUniqueId(ongoingRequests);
+
+            ongoingRequests.add(id);
+
+            const onMessage = ({ data }: IWorkerEvent) => {
+                if (data.id === id) {
+                    ongoingRequests.delete(id);
+
+                    worker.removeEventListener('message', onMessage);
+
+                    if (data.error === null) {
+                        resolve();
+                    } else {
+                        reject(new Error(data.error.message));
+                    }
+                }
+            };
+
+            worker.addEventListener('message', onMessage);
+
+            worker.postMessage(<IConnectRequest> { id, method: 'connect', params: { port } }, [ port ]);
+        });
+    };
+
     const deallocate = (arrayBuffer: ArrayBuffer) => {
         worker.postMessage(<IDeallocateNotification> { id: null, method: 'deallocate', params: { arrayBuffer } }, [ arrayBuffer ]);
     };
 
+    const disconnect = (port: MessagePort): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            const id = generateUniqueId(ongoingRequests);
+
+            ongoingRequests.add(id);
+
+            const onMessage = ({ data }: IWorkerEvent) => {
+                if (data.id === id) {
+                    ongoingRequests.delete(id);
+
+                    worker.removeEventListener('message', onMessage);
+
+                    if (data.error === null) {
+                        resolve();
+                    } else {
+                        reject(new Error(data.error.message));
+                    }
+                }
+            };
+
+            worker.addEventListener('message', onMessage);
+
+            worker.postMessage(<IDisconnectRequest> { id, method: 'disconnect', params: { port } }, [ port ]);
+        });
+    };
+
     return {
         allocate,
-        deallocate
+        connect,
+        deallocate,
+        disconnect
     };
 };
