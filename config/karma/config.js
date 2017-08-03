@@ -15,6 +15,7 @@ module.exports = (config) => {
         ],
 
         frameworks: [
+            'leche',
             'mocha',
             'sinon-chai'
         ],

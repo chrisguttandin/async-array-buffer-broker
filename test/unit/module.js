@@ -1,8 +1,8 @@
-import { load } from '../../src/module';
+import { load, wrap } from '../../src/module';
 
 describe('module', () => {
 
-    let asyncArrayBuffer;
+    let url;
 
     afterEach(() => {
         Worker.reset();
@@ -55,124 +55,140 @@ describe('module', () => {
             });`
         ], { type: 'application/javascript' });
 
-        asyncArrayBuffer = load(URL.createObjectURL(blob));
+        url = URL.createObjectURL(blob);
     });
 
-    describe('allocate()', () => {
+    leche.withData([ 'loaded', 'wrapped' ], (method) => {
 
-        let length;
-
-        beforeEach(() => {
-            length = 1024;
-        });
-
-        it('should send the correct message', (done) => {
-            Worker.addEventListener(0, 'message', ({ data }) => {
-                expect(data.id).to.be.a('number');
-
-                expect(data).to.deep.equal({
-                    id: data.id,
-                    method: 'allocate',
-                    params: { length }
-                });
-
-                done();
-            });
-
-            asyncArrayBuffer.allocate(length);
-        });
-
-    });
-
-    describe('connect()', () => {
-
-        let port;
+        let asyncArrayBuffer;
 
         beforeEach(() => {
-            const messageChannel = new MessageChannel();
+            if (method === 'loaded') {
+                asyncArrayBuffer = load(url);
+            } else {
+                const worker = new Worker(url);
 
-            port = messageChannel.port1;
+                asyncArrayBuffer = wrap(worker);
+            }
         });
 
-        it('should send the correct message', (done) => {
-            Worker.addEventListener(0, 'message', ({ data }) => {
-                expect(data.id).to.be.a('number');
+        describe('allocate()', () => {
 
-                expect(data.params.port).to.be.an.instanceOf(MessagePort);
+            let length;
 
-                expect(data).to.deep.equal({
-                    id: data.id,
-                    method: 'connect',
-                    params: {
-                        port: data.params.port
-                    }
-                });
-
-                done();
+            beforeEach(() => {
+                length = 1024;
             });
 
-            asyncArrayBuffer.connect(port);
-        });
+            it('should send the correct message', (done) => {
+                Worker.addEventListener(0, 'message', ({ data }) => {
+                    expect(data.id).to.be.a('number');
 
-    });
+                    expect(data).to.deep.equal({
+                        id: data.id,
+                        method: 'allocate',
+                        params: { length }
+                    });
 
-    describe('deallocate()', () => {
-
-        let arrayBuffer;
-
-        beforeEach(() => {
-            arrayBuffer = new ArrayBuffer(2048);
-        });
-
-        it('should send the correct message', (done) => {
-            Worker.addEventListener(0, 'message', ({ data }) => {
-                expect(data.params.arrayBuffer).to.be.an.instanceOf(ArrayBuffer);
-                expect(data.params.arrayBuffer.byteLength).to.equal(2048);
-
-                expect(data).to.deep.equal({
-                    id: null,
-                    method: 'deallocate',
-                    params: {
-                        arrayBuffer: data.params.arrayBuffer
-                    }
+                    done();
                 });
 
-                done();
+                asyncArrayBuffer.allocate(length);
             });
 
-            asyncArrayBuffer.deallocate(arrayBuffer);
         });
 
-    });
+        describe('connect()', () => {
 
-    describe('disconnect()', () => {
+            let port;
 
-        let port;
+            beforeEach(() => {
+                const messageChannel = new MessageChannel();
 
-        beforeEach(() => {
-            const messageChannel = new MessageChannel();
+                port = messageChannel.port1;
+            });
 
-            port = messageChannel.port1;
-        });
+            it('should send the correct message', (done) => {
+                Worker.addEventListener(0, 'message', ({ data }) => {
+                    expect(data.id).to.be.a('number');
 
-        it('should send the correct message', (done) => {
-            Worker.addEventListener(0, 'message', ({ data }) => {
-                expect(data.id).to.be.a('number');
+                    expect(data.params.port).to.be.an.instanceOf(MessagePort);
 
-                expect(data.params.port).to.be.an.instanceOf(MessagePort);
+                    expect(data).to.deep.equal({
+                        id: data.id,
+                        method: 'connect',
+                        params: {
+                            port: data.params.port
+                        }
+                    });
 
-                expect(data).to.deep.equal({
-                    id: data.id,
-                    method: 'disconnect',
-                    params: {
-                        port: data.params.port
-                    }
+                    done();
                 });
 
-                done();
+                asyncArrayBuffer.connect(port);
             });
 
-            asyncArrayBuffer.disconnect(port);
+        });
+
+        describe('deallocate()', () => {
+
+            let arrayBuffer;
+
+            beforeEach(() => {
+                arrayBuffer = new ArrayBuffer(2048);
+            });
+
+            it('should send the correct message', (done) => {
+                Worker.addEventListener(0, 'message', ({ data }) => {
+                    expect(data.params.arrayBuffer).to.be.an.instanceOf(ArrayBuffer);
+                    expect(data.params.arrayBuffer.byteLength).to.equal(2048);
+
+                    expect(data).to.deep.equal({
+                        id: null,
+                        method: 'deallocate',
+                        params: {
+                            arrayBuffer: data.params.arrayBuffer
+                        }
+                    });
+
+                    done();
+                });
+
+                asyncArrayBuffer.deallocate(arrayBuffer);
+            });
+
+        });
+
+        describe('disconnect()', () => {
+
+            let port;
+
+            beforeEach(() => {
+                const messageChannel = new MessageChannel();
+
+                port = messageChannel.port1;
+            });
+
+            it('should send the correct message', (done) => {
+                Worker.addEventListener(0, 'message', ({ data }) => {
+                    expect(data.id).to.be.a('number');
+
+                    expect(data.params.port).to.be.an.instanceOf(MessagePort);
+
+                    expect(data).to.deep.equal({
+                        id: data.id,
+                        method: 'disconnect',
+                        params: {
+                            port: data.params.port
+                        }
+                    });
+
+                    done();
+                });
+
+                asyncArrayBuffer.disconnect(port);
+            });
+
         });
 
     });

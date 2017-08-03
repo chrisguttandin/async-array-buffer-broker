@@ -19,9 +19,7 @@ const generateUniqueId = (set: Set<number>) => {
     return id;
 };
 
-export const load = (url: string) => {
-    const worker = new Worker(url);
-
+export const wrap = (worker: MessagePort | Worker) => {
     const ongoingRequests: Set<number> = new Set();
 
     const allocate = (length: number): Promise<ArrayBuffer> => {
@@ -112,4 +110,10 @@ export const load = (url: string) => {
         deallocate,
         disconnect
     };
+};
+
+export const load = (url: string) => {
+    const worker = new Worker(url);
+
+    return wrap(worker);
 };
