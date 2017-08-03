@@ -4,7 +4,7 @@
     "url": "https://github.com/chrisguttandin/async-array-buffer-broker/issues"
   },
   "dependencies": {
-    "async-array-buffer-worker": "^2.0.2"
+    "async-array-buffer-worker": "^2.1.0"
   },
   "description": "The broker which is used by the async-array-buffer package.",
   "devDependencies": {
