@@ -15,17 +15,17 @@ const generateUniqueId = (set: Set<number>) => {
 export const load = (url: string) => {
     const worker = new Worker(url);
 
-    const ongoingRecordingRequests: Set<number> = new Set();
+    const ongoingRequests: Set<number> = new Set();
 
     const allocate = (length: number): Promise<ArrayBuffer> => {
         return new Promise((resolve, reject) => {
-            const id = generateUniqueId(ongoingRecordingRequests);
+            const id = generateUniqueId(ongoingRequests);
 
-            ongoingRecordingRequests.add(id);
+            ongoingRequests.add(id);
 
             const onMessage = ({ data }: IWorkerEvent) => {
                 if (data.id === id) {
-                    ongoingRecordingRequests.delete(id);
+                    ongoingRequests.delete(id);
 
                     worker.removeEventListener('message', onMessage);
 
