@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "async-array-buffer-worker": "^2.1.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "tslint": "^5.7.0"
   },
   "description": "The broker which is used by the async-array-buffer package.",
