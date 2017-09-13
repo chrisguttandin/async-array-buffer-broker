@@ -19,7 +19,7 @@ const generateUniqueId = (set: Set<number>) => {
     return id;
 };
 
-export const wrap = (worker: MessagePort | Worker) => {
+export const wrap = (worker: MessagePort | Worker) => {
     const ongoingRequests: Set<number> = new Set();
 
     const allocate = (length: number): Promise<ArrayBuffer> => {
