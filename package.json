@@ -6,7 +6,7 @@
   "dependencies": {
     "async-array-buffer-worker": "^2.1.6",
     "babel-runtime": "^6.26.0",
-    "tslib": "^1.7.1"
+    "tslib": "^1.8.0"
   },
   "description": "The broker which is used by the async-array-buffer package.",
   "devDependencies": {
