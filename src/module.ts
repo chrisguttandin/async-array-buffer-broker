@@ -6,27 +6,14 @@ import {
     IDisconnectRequest,
     IWorkerEvent
 } from 'async-array-buffer-worker';
-
-const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
-
-const generateUniqueId = (set: Set<number>) => {
-    let id = Math.round(Math.random() * MAX_SAFE_INTEGER);
-
-    while (set.has(id)) {
-        id = Math.round(Math.random() * MAX_SAFE_INTEGER);
-    }
-
-    return id;
-};
+import { addUniqueNumber } from 'fast-unique-numbers';
 
 export const wrap = (worker: MessagePort | Worker) => {
     const ongoingRequests: Set<number> = new Set();
 
     const allocate = (length: number): Promise<ArrayBuffer> => {
         return new Promise((resolve, reject) => {
-            const id = generateUniqueId(ongoingRequests);
-
-            ongoingRequests.add(id);
+            const id = addUniqueNumber(ongoingRequests);
 
             const onMessage = ({ data }: IWorkerEvent) => {
                 if (data.id === id) {
@@ -50,9 +37,7 @@ export const wrap = (worker: MessagePort | Worker) => {
 
     const connect = (port: MessagePort): Promise<void> => {
         return new Promise((resolve, reject) => {
-            const id = generateUniqueId(ongoingRequests);
-
-            ongoingRequests.add(id);
+            const id = addUniqueNumber(ongoingRequests);
 
             const onMessage = ({ data }: IWorkerEvent) => {
                 if (data.id === id) {
@@ -80,9 +65,7 @@ export const wrap = (worker: MessagePort | Worker) => {
 
     const disconnect = (port: MessagePort): Promise<void> => {
         return new Promise((resolve, reject) => {
-            const id = generateUniqueId(ongoingRequests);
-
-            ongoingRequests.add(id);
+            const id = addUniqueNumber(ongoingRequests);
 
             const onMessage = ({ data }: IWorkerEvent) => {
                 if (data.id === id) {
