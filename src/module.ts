@@ -1,12 +1,12 @@
-import { TArrayBufferWorkerDefinition } from 'async-array-buffer-worker';
+import { TAsyncArrayBufferWorkerDefinition } from 'async-array-buffer-worker';
 import { createBroker } from 'broker-factory';
-import { IArrayBufferBrokerDefinition } from './interfaces';
-import { TArrayBufferBrokerLoader, TArrayBufferBrokerWrapper } from './types';
+import { IAsyncArrayBufferBrokerDefinition } from './interfaces';
+import { TAsyncArrayBufferBrokerLoader, TAsyncArrayBufferBrokerWrapper } from './types';
 
 export * from './interfaces';
 export * from './types';
 
-export const wrap: TArrayBufferBrokerWrapper = createBroker<IArrayBufferBrokerDefinition, TArrayBufferWorkerDefinition>({
+export const wrap: TAsyncArrayBufferBrokerWrapper = createBroker<IAsyncArrayBufferBrokerDefinition, TAsyncArrayBufferWorkerDefinition>({
     allocate: ({ call }) => {
         return async (length: number): Promise<ArrayBuffer> => {
             return call('allocate', { length });
@@ -19,7 +19,7 @@ export const wrap: TArrayBufferBrokerWrapper = createBroker<IArrayBufferBrokerDe
     }
 });
 
-export const load: TArrayBufferBrokerLoader = (url: string) => {
+export const load: TAsyncArrayBufferBrokerLoader = (url: string) => {
     const worker = new Worker(url);
 
     return wrap(worker);

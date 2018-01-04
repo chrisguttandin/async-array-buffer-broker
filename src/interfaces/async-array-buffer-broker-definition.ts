@@ -1,6 +1,6 @@
 import { IBrokerDefinition } from 'broker-factory';
 
-export interface IArrayBufferBrokerDefinition extends IBrokerDefinition {
+export interface IAsyncArrayBufferBrokerDefinition extends IBrokerDefinition {
 
     allocate (length: number): Promise<ArrayBuffer>;
 
