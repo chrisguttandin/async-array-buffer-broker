@@ -100,40 +100,6 @@ describe('module', () => {
 
         });
 
-        describe('connect()', () => {
-
-            let port;
-
-            beforeEach(() => {
-                const messageChannel = new MessageChannel();
-
-                port = messageChannel.port1;
-            });
-
-            it('should send the correct message', function (done) {
-                this.timeout(6000);
-
-                Worker.addEventListener(0, 'message', ({ data }) => {
-                    expect(data.id).to.be.a('number');
-
-                    expect(data.params.port).to.be.an.instanceOf(MessagePort);
-
-                    expect(data).to.deep.equal({
-                        id: data.id,
-                        method: 'connect',
-                        params: {
-                            port: data.params.port
-                        }
-                    });
-
-                    done();
-                });
-
-                asyncArrayBuffer.connect(port);
-            });
-
-        });
-
         describe('deallocate()', () => {
 
             let arrayBuffer;
@@ -161,40 +127,6 @@ describe('module', () => {
                 });
 
                 asyncArrayBuffer.deallocate(arrayBuffer);
-            });
-
-        });
-
-        describe('disconnect()', () => {
-
-            let port;
-
-            beforeEach(() => {
-                const messageChannel = new MessageChannel();
-
-                port = messageChannel.port1;
-            });
-
-            it('should send the correct message', function (done) {
-                this.timeout(6000);
-
-                Worker.addEventListener(0, 'message', ({ data }) => {
-                    expect(data.id).to.be.a('number');
-
-                    expect(data.params.port).to.be.an.instanceOf(MessagePort);
-
-                    expect(data).to.deep.equal({
-                        id: data.id,
-                        method: 'disconnect',
-                        params: {
-                            port: data.params.port
-                        }
-                    });
-
-                    done();
-                });
-
-                asyncArrayBuffer.disconnect(port);
             });
 
         });
