@@ -6,7 +6,7 @@
   "dependencies": {
     "async-array-buffer-worker": "^3.0.4",
     "babel-runtime": "^6.26.0",
-    "broker-factory": "^1.2.2",
+    "broker-factory": "^1.2.3",
     "fast-unique-numbers": "^1.1.2",
     "tslib": "^1.8.1"
   },
