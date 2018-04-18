@@ -11,7 +11,7 @@
   "dependencies": {
     "async-array-buffer-worker": "^3.0.20",
     "babel-runtime": "^6.26.0",
-    "broker-factory": "^1.2.17",
+    "broker-factory": "^1.2.18",
     "fast-unique-numbers": "^2.0.0",
     "tslib": "^1.9.0"
   },
