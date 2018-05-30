@@ -13,7 +13,7 @@
     "babel-runtime": "^6.26.0",
     "broker-factory": "^1.2.25",
     "fast-unique-numbers": "^2.0.3",
-    "tslib": "^1.9.1"
+    "tslib": "^1.9.2"
   },
   "description": "The broker which is used by the async-array-buffer package.",
   "devDependencies": {
