@@ -12,7 +12,7 @@
     "async-array-buffer-worker": "^3.0.36",
     "babel-runtime": "^6.26.0",
     "broker-factory": "^1.2.34",
-    "fast-unique-numbers": "^2.0.4",
+    "fast-unique-numbers": "^2.1.0",
     "tslib": "^1.9.3"
   },
   "description": "The broker which is used by the async-array-buffer package.",
