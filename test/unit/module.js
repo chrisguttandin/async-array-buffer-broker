@@ -70,6 +70,8 @@ describe('module', () => {
 
                 asyncArrayBuffer = wrap(worker);
             }
+
+            URL.revokeObjectURL(url);
         });
 
         describe('allocate()', () => {
