@@ -8,12 +8,12 @@ export * from './types';
 
 export const wrap: TAsyncArrayBufferBrokerWrapper = createBroker<IAsyncArrayBufferBrokerDefinition, TAsyncArrayBufferWorkerDefinition>({
     allocate: ({ call }) => {
-        return async (length: number): Promise<ArrayBuffer> => {
+        return async (length) => {
             return call('allocate', { length });
         };
     },
     deallocate: ({ notify }) => {
-        return (arrayBuffer: ArrayBuffer): void => {
+        return (arrayBuffer) => {
             notify('deallocate', { arrayBuffer }, [ arrayBuffer ]);
         };
     }
