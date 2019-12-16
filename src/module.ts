@@ -3,8 +3,12 @@ import { createBroker } from 'broker-factory';
 import { IAsyncArrayBufferBrokerDefinition } from './interfaces';
 import { TAsyncArrayBufferBrokerLoader, TAsyncArrayBufferBrokerWrapper } from './types';
 
-export * from './interfaces';
-export * from './types';
+/*
+ * @todo Explicitly referencing the barrel file seems to be necessary when enabling the
+ * isolatedModules compiler option.
+ */
+export * from './interfaces/index';
+export * from './types/index';
 
 export const wrap: TAsyncArrayBufferBrokerWrapper = createBroker<IAsyncArrayBufferBrokerDefinition, TAsyncArrayBufferWorkerDefinition>({
     allocate: ({ call }) => {
