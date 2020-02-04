@@ -11,7 +11,7 @@
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "async-array-buffer-worker": "^6.0.0",
-    "broker-factory": "^2.0.42",
+    "broker-factory": "^3.0.0",
     "tslib": "^1.10.0"
   },
   "description": "The broker which is used by the async-array-buffer package.",
