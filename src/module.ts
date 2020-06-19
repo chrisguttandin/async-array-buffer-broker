@@ -18,7 +18,7 @@ export const wrap: TAsyncArrayBufferBrokerWrapper = createBroker<IAsyncArrayBuff
     },
     deallocate: ({ notify }) => {
         return (arrayBuffer) => {
-            notify('deallocate', { arrayBuffer }, [ arrayBuffer ]);
+            notify('deallocate', { arrayBuffer }, [arrayBuffer]);
         };
     }
 });

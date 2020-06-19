@@ -1,7 +1,6 @@
 import { load, wrap } from '../../src/module';
 
 describe('module', () => {
-
     let url;
 
     afterEach(() => {
@@ -9,12 +8,12 @@ describe('module', () => {
     });
 
     beforeEach(() => {
-        Worker = ((OriginalWorker) => { // eslint-disable-line no-global-assign
+        // eslint-disable-next-line no-global-assign
+        Worker = ((OriginalWorker) => {
             const instances = [];
 
             return class ExtendedWorker extends OriginalWorker {
-
-                constructor (rl) {
+                constructor(rl) {
                     super(rl);
 
                     const addEventListener = this.addEventListener;
@@ -29,23 +28,24 @@ describe('module', () => {
                     instances.push(this);
                 }
 
-                static addEventListener (index, ...args) {
+                static addEventListener(index, ...args) {
                     return instances[index].addEventListener(index, ...args);
                 }
 
-                static get instances () {
+                static get instances() {
                     return instances;
                 }
 
-                static reset () {
-                    Worker = OriginalWorker; // eslint-disable-line no-global-assign
+                static reset() {
+                    // eslint-disable-next-line no-global-assign
+                    Worker = OriginalWorker;
                 }
-
             };
         })(Worker);
 
-        const blob = new Blob([
-            `self.addEventListener('message', ({ data }) => {
+        const blob = new Blob(
+            [
+                `self.addEventListener('message', ({ data }) => {
                 // The port needs to be send as a Transferable because it can't be cloned.
                 if (data.params !== undefined && data.params.port !== undefined) {
                     self.postMessage(data, [ data.params.port ]);
@@ -53,13 +53,14 @@ describe('module', () => {
                     self.postMessage(data);
                 }
             });`
-        ], { type: 'application/javascript' });
+            ],
+            { type: 'application/javascript' }
+        );
 
         url = URL.createObjectURL(blob);
     });
 
-    leche.withData([ 'loaded', 'wrapped' ], (method) => {
-
+    leche.withData(['loaded', 'wrapped'], (method) => {
         let asyncArrayBuffer;
 
         beforeEach(() => {
@@ -75,7 +76,6 @@ describe('module', () => {
         });
 
         describe('allocate()', () => {
-
             let length;
 
             beforeEach(() => {
@@ -99,11 +99,9 @@ describe('module', () => {
 
                 asyncArrayBuffer.allocate(length);
             });
-
         });
 
         describe('deallocate()', () => {
-
             let arrayBuffer;
 
             beforeEach(() => {
@@ -130,9 +128,6 @@ describe('module', () => {
 
                 asyncArrayBuffer.deallocate(arrayBuffer);
             });
-
         });
-
     });
-
 });
