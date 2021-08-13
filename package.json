@@ -12,7 +12,7 @@
         "@babel/runtime": "^7.15.3",
         "async-array-buffer-worker": "^6.0.45",
         "broker-factory": "^3.0.51",
-        "tslib": "^2.3.0"
+        "tslib": "^2.3.1"
     },
     "description": "The broker which is used by the async-array-buffer package.",
     "devDependencies": {
