@@ -82,9 +82,7 @@ describe('module', () => {
                 length = 1024;
             });
 
-            it('should send the correct message', function (done) {
-                this.timeout(6000);
-
+            it('should send the correct message', (done) => {
                 Worker.addEventListener(0, 'message', ({ data }) => {
                     expect(data.id).to.be.a('number');
 
@@ -108,9 +106,7 @@ describe('module', () => {
                 arrayBuffer = new ArrayBuffer(2048);
             });
 
-            it('should send the correct message', function (done) {
-                this.timeout(6000);
-
+            it('should send the correct message', (done) => {
                 Worker.addEventListener(0, 'message', ({ data }) => {
                     expect(data.params.arrayBuffer).to.be.an.instanceOf(ArrayBuffer);
                     expect(data.params.arrayBuffer.byteLength).to.equal(2048);
