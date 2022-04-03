@@ -60,70 +60,72 @@ describe('module', () => {
         url = URL.createObjectURL(blob);
     });
 
-    leche.withData(['loaded', 'wrapped'], (method) => {
-        let asyncArrayBuffer;
-
-        beforeEach(() => {
-            if (method === 'loaded') {
-                asyncArrayBuffer = load(url);
-            } else {
-                const worker = new Worker(url);
-
-                asyncArrayBuffer = wrap(worker);
-            }
-
-            URL.revokeObjectURL(url);
-        });
-
-        describe('allocate()', () => {
-            let length;
+    for (const method of ['loaded', 'wrapped']) {
+        describe(`with a ${method} worker`, () => {
+            let asyncArrayBuffer;
 
             beforeEach(() => {
-                length = 1024;
+                if (method === 'loaded') {
+                    asyncArrayBuffer = load(url);
+                } else {
+                    const worker = new Worker(url);
+
+                    asyncArrayBuffer = wrap(worker);
+                }
+
+                URL.revokeObjectURL(url);
             });
 
-            it('should send the correct message', (done) => {
-                Worker.addEventListener(0, 'message', ({ data }) => {
-                    expect(data.id).to.be.a('number');
+            describe('allocate()', () => {
+                let length;
 
-                    expect(data).to.deep.equal({
-                        id: data.id,
-                        method: 'allocate',
-                        params: { length }
-                    });
-
-                    done();
+                beforeEach(() => {
+                    length = 1024;
                 });
 
-                asyncArrayBuffer.allocate(length);
-            });
-        });
+                it('should send the correct message', (done) => {
+                    Worker.addEventListener(0, 'message', ({ data }) => {
+                        expect(data.id).to.be.a('number');
 
-        describe('deallocate()', () => {
-            let arrayBuffer;
+                        expect(data).to.deep.equal({
+                            id: data.id,
+                            method: 'allocate',
+                            params: { length }
+                        });
 
-            beforeEach(() => {
-                arrayBuffer = new ArrayBuffer(2048);
-            });
-
-            it('should send the correct message', (done) => {
-                Worker.addEventListener(0, 'message', ({ data }) => {
-                    expect(data.params.arrayBuffer).to.be.an.instanceOf(ArrayBuffer);
-                    expect(data.params.arrayBuffer.byteLength).to.equal(2048);
-
-                    expect(data).to.deep.equal({
-                        id: null,
-                        method: 'deallocate',
-                        params: {
-                            arrayBuffer: data.params.arrayBuffer
-                        }
+                        done();
                     });
 
-                    done();
+                    asyncArrayBuffer.allocate(length);
+                });
+            });
+
+            describe('deallocate()', () => {
+                let arrayBuffer;
+
+                beforeEach(() => {
+                    arrayBuffer = new ArrayBuffer(2048);
                 });
 
-                asyncArrayBuffer.deallocate(arrayBuffer);
+                it('should send the correct message', (done) => {
+                    Worker.addEventListener(0, 'message', ({ data }) => {
+                        expect(data.params.arrayBuffer).to.be.an.instanceOf(ArrayBuffer);
+                        expect(data.params.arrayBuffer.byteLength).to.equal(2048);
+
+                        expect(data).to.deep.equal({
+                            id: null,
+                            method: 'deallocate',
+                            params: {
+                                arrayBuffer: data.params.arrayBuffer
+                            }
+                        });
+
+                        done();
+                    });
+
+                    asyncArrayBuffer.deallocate(arrayBuffer);
+                });
             });
         });
-    });
+    }
 });
